@@ -1,7 +1,7 @@
 provider "aws" {
     region = "eu-west-2"
-    access_key = "AKIATE6YVMDA7G4MGBPT"
-    secret_key = "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"
+    access_key = "*"
+    secret_key = "*"
 }
 
 resource "aws_key_pair" "ec2_instance"{
@@ -100,10 +100,10 @@ resource "null_resource" "ansible_exec" {
 
   depends_on = [local_file.ansible_inventory]
   provisioner "local-exec"{
-    command = "ansible-playbook --inventory-file ${var.inventory}, --private-key /Users/larteyelvis/.ssh/id_rsa nginx.yaml"
+    command = "ansible-playbook --inventory-file ${var.inventory}, --private-key ${var.private_key_loc} nginx.yaml"
   }
 }
 
 output "instance_ip" {
-  value = aws_instance.main_instance.public_ip  
+  value = aws_instance.main_instance.*.public_ip  
 }
