@@ -1,8 +1,7 @@
 provider "aws" {
     region = "eu-west-2"
-    access_key = "*"
-    secret_key = "*"
-}
+
+} 
 
 resource "aws_key_pair" "ec2_instance"{
     key_name  = "testing-ansible"
@@ -17,7 +16,6 @@ variable "private_key_loc" {
     description = "Location of the private key file."
     type        = string
     default     = "/Users/larteyelvis/.ssh/id_rsa"
-    sensitive   = true
 }
 
 variable "inventory" {
@@ -67,6 +65,7 @@ resource "aws_instance" "main_instance" {
     associate_public_ip_address = true
     key_name = aws_key_pair.ec2_instance.id
     security_groups = [aws_security_group.allow_ssh.name]
+    count = 2
 
     provisioner "remote-exec" {
         inline = ["echo 'Wait until SSH is ready.'"]
@@ -75,7 +74,8 @@ resource "aws_instance" "main_instance" {
           type = "ssh"
           user = "ubuntu"
           private_key = file("${var.private_key_loc}")
-          host  = aws_instance.main_instance.public_ip
+          # host  = aws_instance.main_instance[0].public_ip
+          host = "${self.public_ip}"
         }
     }
 
@@ -100,7 +100,7 @@ resource "null_resource" "ansible_exec" {
 
   depends_on = [local_file.ansible_inventory]
   provisioner "local-exec"{
-    command = "ansible-playbook --inventory-file ${var.inventory}, --private-key ${var.private_key_loc} nginx.yaml"
+    command = "ansible-playbook --inventory ${var.inventory} --private-key ${var.private_key_loc} nginx.yaml"
   }
 }
 
