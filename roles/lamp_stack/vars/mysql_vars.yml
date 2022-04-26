@@ -1,0 +1,6 @@
+---
+root_password: &pass 'p@$$w0rd028.'
+user_name: 'elartey'
+user_password: *pass
+database_name: !!str wordpress
+wp_prefix: 'wp_'

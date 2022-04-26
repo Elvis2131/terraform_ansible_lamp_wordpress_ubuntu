@@ -1,0 +1,4 @@
+---
+domain_name: !!str elis.tech
+host_name: !!str elt-lamp-server
+serverAdminEmail: !!str webmaster@localhost.domain

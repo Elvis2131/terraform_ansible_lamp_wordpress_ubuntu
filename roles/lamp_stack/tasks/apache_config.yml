@@ -1,0 +1,16 @@
+- name: Disabling 000-default.conf
+  command: sudo a2dissite 000-default.conf
+
+- name: Copying the apache config.
+  template:
+    src: "elis.tech.conf.j2"
+    dest: "/etc/apache2/sites-available/{{domain_name}}.conf"
+  notify: Restart apache2
+
+- name: Enabling the new apache config.
+  command: "sudo a2ensite {{domain_name}}.conf"
+  notify: Restart apache2
+
+- name: Enable url rewriting
+  command: "sudo a2enmod rewrite"
+  notify: Restart apache2

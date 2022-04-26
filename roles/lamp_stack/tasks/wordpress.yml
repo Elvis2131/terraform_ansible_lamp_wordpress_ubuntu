@@ -1,0 +1,20 @@
+---
+- name: Download and unzip wordpress.
+  unarchive:
+    src: 'https://wordpress.org/latest.tar.gz'
+    dest: '/var/www/{{ domain_name }}'
+    owner: 'www-data'
+    group: 'www-data'
+    remote_src: True
+
+- name: Remove wp-config-sample.php
+  file:
+    path: '/var/www/{{ domain_name }}/wordpress/wp-config-sample.php'
+    state: absent
+
+- name: Set wp-config.php
+  template: 
+    src: "wp-config.php.j2"
+    dest: '/var/www/{{ domain_name }}/wordpress/wp-config.php'
+    
+  notify: Restart apache2
