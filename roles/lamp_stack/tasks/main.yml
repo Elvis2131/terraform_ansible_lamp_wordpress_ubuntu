@@ -1,0 +1,50 @@
+---
+# tasks file for lamp_stack
+  - name: Set Server Host Name.
+    hostname:
+      name: '{{ host_name }}'
+
+  - name: Updating Ubuntu Server Distros 'apt update && apt upgrade.'
+    apt:
+      upgrade: safe
+      update_cache: yes
+
+  - name: Install needed packages.
+    apt:
+      name: '{{ item }}'
+      state: latest
+    with_items: 
+      - 'apache2'
+      - 'mysql-server'
+      - 'php'
+      - 'libapache2-mod-php'
+      - 'php-mysql'
+      - 'php-bcmath'
+      - 'php-curl'
+      - 'php-imagick'
+      - 'php-intl'
+      - 'php-json'
+      - 'php-mbstring'
+      - 'php-mysql'
+      - 'php-xml'
+      - 'php-zip'
+      - 'python3-pip'
+      - 'ghostscript'
+
+  - name: Start all services.
+    systemd:
+      name: '{{ item }}'
+      state: started
+      enabled: yes
+    with_items: ['apache2','mysql']
+
+  - name: Install python's Mysql module.
+    pip:
+      name: pymysql
+      state: present
+  
+  - import_tasks: ufw.yml
+  - import_tasks: mysql_setup.yml
+  - import_tasks: apache_config.yml
+  - import_tasks: app_setup.yml
+  - import_tasks: wordpress.yml

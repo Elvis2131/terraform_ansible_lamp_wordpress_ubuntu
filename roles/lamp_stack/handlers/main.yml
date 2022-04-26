@@ -1,0 +1,4 @@
+---
+# handlers file for lamp_stack
+- include: apache2.yml
+- include: mysql.yml

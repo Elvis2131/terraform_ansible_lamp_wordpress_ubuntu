@@ -1,0 +1,8 @@
+- name: Updating the firewall rules.
+  ufw:
+    rule: allow
+    port: '{{ item }}'
+    proto: tcp
+  with_items: 
+    - '80'
+    - '443'

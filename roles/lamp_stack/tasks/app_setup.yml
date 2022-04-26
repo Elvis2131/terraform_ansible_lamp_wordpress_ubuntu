@@ -1,0 +1,12 @@
+- name: Create the application folder.
+  file:
+    path: "/var/www/{{domain_name}}"
+    state: directory
+    mode: '0755'
+    owner: 'ubuntu'
+    group: 'ubuntu'
+
+- name: Copy index.html to folder.
+  copy:
+    src: index.html
+    dest: "/var/www/{{domain_name}}"

@@ -1,0 +1,15 @@
+---
+# vars file for lamp_stack
+domain_name: !!str elis.tech
+host_name:  !!str elt-lamp-server
+serverAdminEmail: !!str webmaster@localhost.domain
+
+root_password: &pass 'p@$$w0rd028.'
+user_name: !!str elartey
+user_password: *pass
+database_name: !!str wordpress
+wp_prefix: 'wp_'
+
+ports_allowed:
+  - '80'
+  - '443'

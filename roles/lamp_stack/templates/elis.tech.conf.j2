@@ -1,0 +1,17 @@
+<VirtualHost *:80>
+    ServerAdmin {{ serverAdminEmail }}
+    DocumentRoot /var/www/{{ domain_name }}/wordpress
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+    <Directory /var/www/{{ domain_name }}/wordpress>
+        Options FollowSymLinks
+        AllowOverride Limit Options FileInfo
+        DirectoryIndex index.php
+        Require all granted
+    </Directory>
+    <Directory /var/www/{{ domain_name }}/wordpress/wp-content>
+        Options FollowSymLinks
+        Require all granted
+    </Directory>
+</VirtualHost>
