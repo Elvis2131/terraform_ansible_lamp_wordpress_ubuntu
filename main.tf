@@ -1,6 +1,7 @@
 provider "aws" {
     region = "eu-west-2"
-
+    access_key = "AKIATE6YVMDART4FHR7L"
+    secret_key = "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"
 } 
 
 resource "aws_key_pair" "ec2_instance"{
@@ -74,7 +75,6 @@ resource "aws_instance" "main_instance" {
           type = "ssh"
           user = "ubuntu"
           private_key = file("${var.private_key_loc}")
-          # host  = aws_instance.main_instance[0].public_ip
           host = "${self.public_ip}"
         }
     }
@@ -86,9 +86,9 @@ resource "aws_instance" "main_instance" {
 
 resource "local_file" "ansible_inventory"{
     content = templatefile("${path.module}/templates/inventory.tpl",
-    {
-      instances = aws_instance.main_instance.*.public_ip
-    }
+      {
+        instances = aws_instance.main_instance.*.public_ip
+      }
     )
 
     filename = "${var.inventory}"
