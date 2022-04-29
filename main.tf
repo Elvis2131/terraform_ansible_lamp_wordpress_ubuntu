@@ -1,7 +1,5 @@
 provider "aws" {
     region = "eu-west-2"
-    access_key = "AKIATE6YVMDART4FHR7L"
-    secret_key = "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"
 } 
 
 resource "aws_key_pair" "ec2_instance"{
@@ -23,7 +21,6 @@ variable "inventory" {
     description = "Location of the inventory_file"
     type        = string 
     default     = "./inventory.yml"
-  
 }
 
 resource "aws_security_group" "allow_ssh" {
@@ -61,7 +58,8 @@ resource "aws_security_group" "allow_ssh" {
 
 
 resource "aws_instance" "main_instance" {
-    ami           = "ami-0015a39e4b7c0966f"
+    # ami           = "ami-0015a39e4b7c0966f" #Ubuntu
+    ami           = "ami-0ad8ecac8af5fc52b" #CentOS
     instance_type = "t3.micro"
     associate_public_ip_address = true
     key_name = aws_key_pair.ec2_instance.id

@@ -4,6 +4,9 @@ domain_name: !!str elis.tech
 host_name:  !!str elt-lamp-server
 serverAdminEmail: !!str webmaster@localhost.domain
 
+ssh_username: 
+
+
 root_password: &pass 'p@$$w0rd028.'
 user_name: !!str elartey
 user_password: *pass

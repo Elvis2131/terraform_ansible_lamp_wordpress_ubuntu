@@ -8,12 +8,19 @@
     apt:
       upgrade: safe
       update_cache: yes
+    when: &register_ubuntu ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+  - name: Updating the CentOS server 'yum update and upgrade.'
+    yum:
+      update_cache: yes
+      upgrade: safe
+    when: &register_centos ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
 
   - name: Install needed packages.
     apt:
       name: '{{ item }}'
       state: latest
-    with_items: 
+    with_items:
       - 'apache2'
       - 'mysql-server'
       - 'php'
@@ -30,6 +37,30 @@
       - 'php-zip'
       - 'python3-pip'
       - 'ghostscript'
+    when: *register_ubuntu
+
+  - name: Install needed packages (CentOS)
+    yum:
+      name: '{{ item }}'
+      state: latest
+    with_items:
+      - 'httpd'
+      - 'mariadb-server'
+      - 'php'
+      - 'libapache2-mod-php'
+      - 'php-mysql'
+      - 'php-bcmath'
+      - 'php-curl'
+      - 'php-imagick'
+      - 'php-intl'
+      - 'php-json'
+      - 'php-mbstring'
+      - 'php-mysql'
+      - 'php-xml'
+      - 'php-zip'
+      - 'python3-pip'
+      - 'ghostscript'
+    when: *register_centos
 
   - name: Start all services.
     systemd:
