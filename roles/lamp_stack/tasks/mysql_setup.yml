@@ -1,4 +1,4 @@
-- name: Create root user password.
+- name: Create root user password(Debian).
   mysql_user:
     login_host: 'localhost'
     login_unix_socket: /var/run/mysqld/mysqld.sock
@@ -7,6 +7,17 @@
     name: root
     password: "{{ root_password }}"
     state: present
+  when: ansible_distribution == "Ubuntu"
+
+- name: mysql_root_password(RedHat)
+  mysql_user:
+    login_user: root
+    login_password: "{{ root_password }}"
+    user: root
+    check_implicit_admin: yes
+    password: "{{ root_password }}"
+    host: localhost
+  when: ansible_distribution == 'RedHat'
 
 - name: Removing all anonymous users.
   mysql_user:

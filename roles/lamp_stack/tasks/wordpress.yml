@@ -3,8 +3,8 @@
   unarchive:
     src: 'https://wordpress.org/latest.tar.gz'
     dest: '/var/www/{{ domain_name }}'
-    owner: 'www-data'
-    group: 'www-data'
+    owner: '{{ "www-data" if ansible_distribution == "Ubuntu" else "ec2-user" }}'
+    group: '{{ "www-data" if ansible_distribution == "Ubuntu" else "ec2-user" }}'
     remote_src: True
 
 - name: Remove wp-config-sample.php
@@ -16,5 +16,4 @@
   template: 
     src: "wp-config.php.j2"
     dest: '/var/www/{{ domain_name }}/wordpress/wp-config.php'
-    
-  notify: Restart apache2
+  notify: Restart apache

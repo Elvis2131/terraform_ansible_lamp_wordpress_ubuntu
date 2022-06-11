@@ -4,77 +4,50 @@
     hostname:
       name: '{{ host_name }}'
 
+  - name: Print the OS type.
+    debug:
+      msg: "{{ ansible_distribution }}"
+
   - name: Updating Ubuntu Server Distros 'apt update && apt upgrade.'
     apt:
       upgrade: safe
       update_cache: yes
-    when: &register_ubuntu ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+    when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
   - name: Updating the CentOS server 'yum update and upgrade.'
     yum:
       update_cache: yes
-      upgrade: safe
-    when: &register_centos ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+      skip_broken: yes
+    when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
 
-  - name: Install needed packages.
+  - name: Install needed packages(Debian).
     apt:
       name: '{{ item }}'
       state: latest
-    with_items:
-      - 'apache2'
-      - 'mysql-server'
-      - 'php'
-      - 'libapache2-mod-php'
-      - 'php-mysql'
-      - 'php-bcmath'
-      - 'php-curl'
-      - 'php-imagick'
-      - 'php-intl'
-      - 'php-json'
-      - 'php-mbstring'
-      - 'php-mysql'
-      - 'php-xml'
-      - 'php-zip'
-      - 'python3-pip'
-      - 'ghostscript'
-    when: *register_ubuntu
+    with_items: '{{debian_packages}}'
+    when: ansible_distribution == "Ubuntu"
 
-  - name: Install needed packages (CentOS)
+  - name: Install needed packages(CentOS).
     yum:
       name: '{{ item }}'
       state: latest
-    with_items:
-      - 'httpd'
-      - 'mariadb-server'
-      - 'php'
-      - 'libapache2-mod-php'
-      - 'php-mysql'
-      - 'php-bcmath'
-      - 'php-curl'
-      - 'php-imagick'
-      - 'php-intl'
-      - 'php-json'
-      - 'php-mbstring'
-      - 'php-mysql'
-      - 'php-xml'
-      - 'php-zip'
-      - 'python3-pip'
-      - 'ghostscript'
-    when: *register_centos
+    with_items: '{{ rhel_packages }}'
+    when: ansible_distribution == 'RedHat'
 
-  - name: Start all services.
+  - name: Start all services(Ubuntu/Debian).
     systemd:
       name: '{{ item }}'
       state: started
       enabled: yes
-    with_items: ['apache2','mysql']
+    with_items: '{{ debian_services if ansible_distribution == "Ubuntu" else rhel_services }}'
+
 
   - name: Install python's Mysql module.
     pip:
       name: pymysql
       state: present
   
-  - import_tasks: ufw.yml
+  - import_tasks: firewall.yml
   - import_tasks: mysql_setup.yml
   - import_tasks: apache_config.yml
   - import_tasks: app_setup.yml

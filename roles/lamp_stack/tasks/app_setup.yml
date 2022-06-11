@@ -1,12 +1,12 @@
 - name: Create the application folder.
   file:
-    path: "/var/www/{{domain_name}}"
+    path: "/var/www/{{ domain_name }}"
     state: directory
     mode: '0755'
-    owner: 'ubuntu'
-    group: 'ubuntu'
+    owner: '{{ "ubuntu" if ansible_distribution == "Ubuntu" else "ec2-user" }}'
+    group: '{{ "ubuntu" if ansible_distribution == "Ubuntu" else "ec2-user" }}'
 
 - name: Copy index.html to folder.
   copy:
     src: index.html
-    dest: "/var/www/{{domain_name}}"
+    dest: "/var/www/{{ domain_name }}"

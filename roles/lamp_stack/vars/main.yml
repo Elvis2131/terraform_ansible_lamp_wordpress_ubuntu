@@ -6,6 +6,8 @@ serverAdminEmail: !!str webmaster@localhost.domain
 
 ssh_username: 
 
+debian_services: ['apache2','mysql']
+rhel_services: ['httpd','mariadb.service']
 
 root_password: &pass 'p@$$w0rd028.'
 user_name: !!str elartey
@@ -16,3 +18,39 @@ wp_prefix: 'wp_'
 ports_allowed:
   - '80'
   - '443'
+
+debian_packages:
+  - 'apache2'
+  - 'mysql-server'
+  - 'php'
+  - 'libapache2-mod-php'
+  - 'php-mysql'
+  - 'php-bcmath'
+  - 'php-curl'
+  - 'php-imagick'
+  - 'php-intl'
+  - 'php-json'
+  - 'php-mbstring'
+  - 'php-mysql'
+  - 'php-xml'
+  - 'php-zip'
+  - 'python3-pip'
+  - 'ghostscript'
+
+rhel_packages:
+  - 'httpd'
+  - 'mariadb-server'
+  - 'php'
+  - 'php-mysqlnd'
+  - 'php-opcache'
+  - 'php-gd'
+  - 'php-pdo'
+  - 'php-bcmath'
+  - 'php-curl'
+  - 'php-intl'
+  - 'php-json'
+  - 'php-mbstring'
+  - 'php-xml'
+  - 'php-zip'
+  - 'python3-pip'
+  - 'ghostscript' 

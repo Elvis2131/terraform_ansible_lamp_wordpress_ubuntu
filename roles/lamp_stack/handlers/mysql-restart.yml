@@ -1,0 +1,5 @@
+---
+- name: Restart mysql
+  service:
+    name: '{{mysql if ansible_distribution == "Ubuntu" else mariadb.service}}'
+    state: restarted

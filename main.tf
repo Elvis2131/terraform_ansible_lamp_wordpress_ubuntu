@@ -58,8 +58,8 @@ resource "aws_security_group" "allow_ssh" {
 
 
 resource "aws_instance" "main_instance" {
-    # ami           = "ami-0015a39e4b7c0966f" #Ubuntu
-    ami           = "ami-0ad8ecac8af5fc52b" #CentOS
+    ami           = "ami-0015a39e4b7c0966f" #Ubuntu
+    # ami           = "ami-0ad8ecac8af5fc52b" #CentOS
     instance_type = "t3.micro"
     associate_public_ip_address = true
     key_name = aws_key_pair.ec2_instance.id

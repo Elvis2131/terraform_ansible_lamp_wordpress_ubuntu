@@ -1,0 +1,17 @@
+- name: Updating the firewall rules.
+  ufw:
+    rule: allow
+    port: '{{ item }}'
+    proto: tcp
+  with_items: 
+    - '80'
+    - '443'
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+
+# - name: Updating the firewall rules(RHEL or CentOS)
+#   command: 'firewall-cmd --zone=public --add-port={{ item }}/tcp --permanent'
+#   with_items:
+#     - '80'
+#     - '443'
+#   when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
